@@ -40,6 +40,7 @@ def load_datasets():
 
 def main(unused_argv):
   if FLAGS.test == True:
+    import numpy;
     import cv2;
     (train_x2, test_x2), (train_x3, test_x3), (train_x4, test_x4) = load_datasets();
     for lr, hr in train_x2:
