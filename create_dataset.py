@@ -7,7 +7,7 @@ import tensorflow_datasets as tfds;
 FLAGS = flags.FLAGS;
 
 def add_options():
-  flags.DEFINE_bool('test', False, help = 'test dataset input pipeline');
+  flags.DEFINE_bool('test', default = False, help = 'test dataset input pipeline');
 
 def download():
   div2k_x2_builder = tfds.build('div2k/bicubic_x2');
@@ -38,9 +38,8 @@ def load_datasets():
   testset_x4 = testset_x4.map(parse_sample);
   return (trainset_x2,testset_x2), (trainset_x3, testset_x3), (trainset_x4, testset_x4);
 
-if __name__ == "__main__":
-  add_options();
-  if FLAGS.test:
+def main(unused_argv):
+  if FLAGS.test == True:
     import cv2;
     (train_x2, test_x2), (train_x3, test_x3), (train_x4, test_x4) = load_datasets();
     for lr, hr in train_x2:
@@ -53,4 +52,7 @@ if __name__ == "__main__":
       cv2.waitKey();
   else:
     download();
+
+if __name__ == "__main__":
+  app.run(main);
 
