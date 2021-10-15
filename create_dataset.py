@@ -10,9 +10,9 @@ def add_options():
   flags.DEFINE_bool('test', default = False, help = 'test dataset input pipeline');
 
 def download():
-  div2k_x2_builder = tfds.build('div2k/bicubic_x2');
-  div2k_x3_builder = tfds.build('div2k/bicubic_x3');
-  div2k_x4_builder = tfds.build('div2k/bicubic_x4');
+  div2k_x2_builder = tfds.builder('div2k/bicubic_x2');
+  div2k_x3_builder = tfds.builder('div2k/bicubic_x3');
+  div2k_x4_builder = tfds.builder('div2k/bicubic_x4');
   div2k_x2_builder.download_and_prepare();
   div2k_x3_builder.download_and_prepare();
   div2k_x4_builder.download_and_prepare();
