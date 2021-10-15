@@ -46,8 +46,8 @@ def main(unused_argv):
     for lr, hr in train_x2:
       lr = lr + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
       hr = hr + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
-      lr = lr.numpy().astype(np.uint8);
-      hr = hr.numpy().astype(np.uint8);
+      lr = lr.numpy().astype(np.uint8)[::-1];
+      hr = hr.numpy().astype(np.uint8)[::-1];
       cv2.imshow('lr', lr);
       cv2.imshow('hr', hr);
       cv2.waitKey();
