@@ -18,7 +18,7 @@ def add_options():
   flags.DEFINE_float('lr', default = 1e-4, help = 'learning rate');
   flags.DEFINE_bool('save_model', default = False, help = 'whether to save model');
   flags.DEFINE_integer('eval_steps', default = 100, help = 'how many iterations for each evaluation');
-  flags.DEFINE_enum('scale', default = 2, enum_values = [2,3,4], help = 'train EDSR on which scale of DIV2K');
+  flags.DEFINE_enum('scale', default = '2', enum_values = ['2','3','4'], help = 'train EDSR on which scale of DIV2K');
 
 def main(unused_argv):
   # 1) create dataset
@@ -76,7 +76,7 @@ def main(unused_argv):
       model = models[idx];
       avg_loss = avg_losses[idx];
     elif FLAGS.model == 'EDSR':
-      idx = {2: 0, 3: 1, 4: 2}[FLAGS.scale];
+      idx = {'2': 0, '3': 1, '4': 2}[FLAGS.scale];
     else:
       raise Exception('unknown model');
     trainset = trainsets[idx];
