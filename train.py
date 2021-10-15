@@ -80,7 +80,7 @@ def main(unused_argv):
     else:
       raise Exception('unknown model');
     trainset = trainsets[idx];
-    testset = testset[idx];
+    testset = testsets[idx];
     lr, hr = next(trainset);
     with tf.GradientTape() as tape:
       preds = model(lr);
