@@ -54,5 +54,6 @@ def main(unused_argv):
     download();
 
 if __name__ == "__main__":
+  add_options();
   app.run(main);
 
