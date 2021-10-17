@@ -17,7 +17,7 @@ python3 create_dataset.py
 train with command
 
 ```shell
-python3 train.py --model (EDSR|MDSR) --batch_size <batch size>
+python3 train.py --model (EDSR|MDSR) --batch_size <batch size> [--scale <which scale of super resolution is trained if you train EDSR>]
 ```
 
 ## how to save model
