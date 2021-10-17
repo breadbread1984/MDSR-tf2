@@ -19,10 +19,12 @@ def add_options():
   flags.DEFINE_bool('save_model', default = False, help = 'whether to save model');
   flags.DEFINE_integer('eval_steps', default = 100, help = 'how many iterations for each evaluation');
   flags.DEFINE_enum('scale', default = '2', enum_values = ['2','3','4'], help = 'train EDSR on which scale of DIV2K');
+  flags.DEFINE_integer('lr_size', default = 192. help = 'input size for low resolution image');
+  flags.DEFINE_enum('method', default = 'bicubic', enum_values = ['area', 'bicubic', 'bilinear', 'gaussian', 'lanczos3', 'lanczos5', 'mitchellcubic', 'nearest'], help = 'downsample method for preprocess');
 
 def main(unused_argv):
   # 1) create dataset
-  (trainset_x2,testset_x2), (trainset_x3, testset_x3), (trainset_x4, testset_x4) = load_datasets();
+  (trainset_x2,testset_x2), (trainset_x3, testset_x3), (trainset_x4, testset_x4) = load_datasets((FLAGS.lr_size, FLAGS.lr_size), FLAGS.method);
   trainset_x2 = iter(trainset_x2.shuffle(FLAGS.batch_size).batch(FLAGS.batch_size).prefetch(tf.data.experimental.AUTOTUNE).repeat(-1));
   testset_x2 = iter(testset_x2.batch(1).prefetch(tf.data.experimental.AUTOTUNE).repeat(-1));
   trainset_x3 = iter(trainset_x3.shuffle(FLAGS.batch_size).batch(FLAGS.batch_size).prefetch(tf.data.experimental.AUTOTUNE).repeat(-1));
@@ -84,7 +86,7 @@ def main(unused_argv):
     lr, hr = next(trainset);
     with tf.GradientTape() as tape:
       preds = model(lr);
-      loss = tf.keras.losses.MeanAbsoluteError()(hr, lr);
+      loss = tf.keras.losses.MeanAbsoluteError()(hr, preds);
     grads = tape.gradient(loss, model.trainable_variables);
     optimizer.apply_gradients(zip(grads, model.trainable_variables));
     avg_loss.update_state(loss);
