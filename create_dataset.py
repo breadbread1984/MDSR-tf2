@@ -17,25 +17,29 @@ def download():
   div2k_x3_builder.download_and_prepare();
   div2k_x4_builder.download_and_prepare();
 
-def parse_sample(features):
-  hr, lr = features['hr'], features['lr'];
-  lr = tf.cast(lr, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
-  hr = tf.cast(hr, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
-  return lr, hr;
+def parse_function_generator(lr_size = (192, 192), hr_size = (768, 768), method = 'bicubic'):
+  def parse_sample(features):
+    hr, lr = features['hr'], features['lr'];
+    lr = tf.cast(lr, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
+    hr = tf.cast(hr, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,3));
+    lr = tf.image.resize(lr, lr_size, method = method);
+    hr = tf.image.resize(hr, hr_size, method = method);
+    return lr, hr;
+  return parse_sample;
 
-def load_datasets():
+def load_datasets(lr_size = (192, 192), method = 'bicubic'):
   trainset_x2 = tfds.load(name = 'div2k/bicubic_x2', split = 'train', download = False);
   testset_x2 = tfds.load(name = 'div2k/bicubic_x2', split = 'validation', download = False);
   trainset_x3 = tfds.load(name = 'div2k/bicubic_x3', split = 'train', download = False);
   testset_x3 = tfds.load(name = 'div2k/bicubic_x3', split = 'validation', download = False);
   trainset_x4 = tfds.load(name = 'div2k/bicubic_x4', split = 'train', download = False);
   testset_x4 = tfds.load(name = 'div2k/bicubic_x4', split = 'validation', download = False);
-  trainset_x2 = trainset_x2.map(parse_sample);
-  testset_x2 = testset_x2.map(parse_sample);
-  trainset_x3 = trainset_x3.map(parse_sample);
-  testset_x3 = testset_x3.map(parse_sample);
-  trainset_x4 = trainset_x4.map(parse_sample);
-  testset_x4 = testset_x4.map(parse_sample);
+  trainset_x2 = trainset_x2.map(parse_function_generator(lr_size, (lr_size[0] * 2, lr_size[1] * 2), method));
+  testset_x2 = testset_x2.map(parse_function_generator(lr_size, (lr_size[0] * 2, lr_size[1] * 2), method));
+  trainset_x3 = trainset_x3.map(parse_function_generator(lr_size, (lr_size[0] * 3, lr_size[1] * 3), method));
+  testset_x3 = testset_x3.map(parse_function_generator(lr_size, (lr_size[0] * 3, lr_size[1] * 3), method));
+  trainset_x4 = trainset_x4.map(parse_function_generator(lr_size, (lr_size[0] * 4, lr_size[1] * 4), method));
+  testset_x4 = testset_x4.map(parse_function_generator(lr_size, (lr_size[0] * 4, lr_size[1] * 4), method));
   return (trainset_x2,testset_x2), (trainset_x3, testset_x3), (trainset_x4, testset_x4);
 
 def main(unused_argv):
