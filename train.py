@@ -94,6 +94,7 @@ def main(unused_argv):
       lr, hr = next(testset);
       preds = model(lr);
       image = tf.cast(preds + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3)), dtype = tf.uint8);
+      hr = tf.cast(hr + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3)), dtype = tf.uint8);
       with log.as_default():
         tf.summary.scalar('x' + str([2,3,4][idx]) + '_loss', avg_loss.result(), step = optimizer.iterations);
         tf.summary.image('predicted', image, step = optimizer.iterations);
