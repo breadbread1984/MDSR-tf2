@@ -19,7 +19,7 @@ def add_options():
   flags.DEFINE_bool('save_model', default = False, help = 'whether to save model');
   flags.DEFINE_integer('eval_steps', default = 100, help = 'how many iterations for each evaluation');
   flags.DEFINE_enum('scale', default = '2', enum_values = ['2','3','4'], help = 'train EDSR on which scale of DIV2K');
-  flags.DEFINE_integer('lr_size', default = 192. help = 'input size for low resolution image');
+  flags.DEFINE_integer('lr_size', default = 192, help = 'input size for low resolution image');
   flags.DEFINE_enum('method', default = 'bicubic', enum_values = ['area', 'bicubic', 'bilinear', 'gaussian', 'lanczos3', 'lanczos5', 'mitchellcubic', 'nearest'], help = 'downsample method for preprocess');
 
 def main(unused_argv):
