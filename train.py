@@ -93,6 +93,12 @@ def main(unused_argv):
     avg_loss.update_state(loss);
     if optimizer.iterations % FLAGS.checkpoint_steps == 1:
       checkpoint.save(join(FLAGS.checkpoint, 'ckpt'));
+      if FLAGS.model == 'MDSR':
+        model_x2.save('model_x2.h5'); model_x2.save_weights('model_x2_weights.h5');
+        model_x3.save('model_x3.h5'); model_x3.save_weights('model_x3_weights.h5');
+        model_x4.save('model_x4.h5'); model_x4.save_weights('model_x4_weights.h5');
+      else:
+        model.save('model.h5'); model.save_weights('model_weights.h5');
     if optimizer.iterations % FLAGS.eval_steps == 1:
       lr, hr = next(testset);
       preds = model(lr);
