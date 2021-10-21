@@ -27,7 +27,7 @@ def main(unused_argv):
       outputs = model(lr);
       outputs = outputs + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
       large = tf.squeeze(outputs, axis = 0);
-      large = large.numpy().astype(np.uint8);
+      large = large.numpy().astype(np.uint8)[:,:,::-1];
       cv2.imshow('sr', large);
       cv2.waitKey();
   else:
@@ -36,7 +36,7 @@ def main(unused_argv):
     outputs = model(inputs);
     outputs = outputs + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
     large = tf.squeeze(outputs, axis = 0); # large.shape = (h, w, 3)
-    large = large.numpy().astype(np.uint8);
+    large = large.numpy().astype(np.uint8)[:,:,::-1];
     cv2.imshow('sr', large);
     cv2.waitKey();
 
