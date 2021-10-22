@@ -39,7 +39,7 @@ def main(unused_argv):
     model_x2, model_x3, model_x4 = MDSR(scales = [2,3,4]);
     models = [model_x2, model_x3, model_x4];
   elif FLAGS.model == 'EDSR':
-    model = EDSR();
+    model = EDSR(scale = int(FLAGS.scale));
   else:
     raise Exception('unknown model');
   # 3) optimizer
