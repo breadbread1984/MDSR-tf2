@@ -10,14 +10,13 @@ from create_dataset import load_datasets;
 FLAGS = flags.FLAGS;
 
 def add_options():
-  flags.DEFINE_string('model', default = join('models', 'model_x2.h5'), help = 'model path');
   flags.DEFINE_string('image', default = None, help = 'image path');
   flags.DEFINE_integer('lr_size', default = 192, help = 'input size for low resolution image');
   flags.DEFINE_enum('scale', default = '2', enum_values = ['2','3','4'], help = 'train EDSR on which scale of DIV2K');
   flags.DEFINE_enum('method', default = 'bicubic', enum_values = ['area', 'bicubic', 'bilinear', 'gaussian', 'lanczos3', 'lanczos5', 'mitchellcubic', 'nearest'], help = 'downsample method for preprocess');
 
 def main(unused_argv):
-  model = tf.keras.models.load_model(FLAGS.model);
+  model = tf.keras.models.load_model(join('models', 'model_x%s.h5' % FLAGS.scale));
   img = cv2.imread(FLAGS.image);
   if img is None:
     (trainset_x2,testset_x2), (trainset_x3, testset_x3), (trainset_x4, testset_x4) = load_datasets((FLAGS.lr_size, FLAGS.lr_size), FLAGS.method);
