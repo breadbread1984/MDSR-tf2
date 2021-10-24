@@ -42,7 +42,7 @@ def main(unused_argv):
     while retval:
       retval, img = video.read();
       if retval == False: break;
-      inputs = tf.expand_dims(img, axis = 0);
+      inputs = tf.expand_dims(img[...,::-1], axis = 0);
       inputs = tf.cast(inputs, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
       outputs = model(inputs);
       outputs = outputs + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
@@ -56,7 +56,7 @@ def main(unused_argv):
     if img is None:
       print('invalid image');
       exit();
-    inputs = tf.expand_dims(img, axis = 0); # inputs.shape = (1, h, w, 3)
+    inputs = tf.expand_dims(img[...,::-1], axis = 0); # inputs.shape = (1, h, w, 3)
     inputs = tf.cast(inputs, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
     outputs = model(inputs);
     outputs = outputs + tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
