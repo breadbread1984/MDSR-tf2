@@ -38,9 +38,9 @@ def main(unused_argv):
     if video.isOpened() == False:
       print('invalid video');
       exit();
-    retval = True:
+    retval = True;
     while retval:
-      retval, img = vidoe.read();
+      retval, img = video.read();
       if retval == False: break;
       inputs = tf.expand_dims(img, axis = 0);
       inputs = tf.cast(inputs, dtype = tf.float32) - tf.reshape([114.444 , 111.4605, 103.02  ], (1,1,1,3));
@@ -49,6 +49,8 @@ def main(unused_argv):
       large = tf.squeeze(outputs, axis = 0);
       large = large.numpy().astype(np.uint8)[:,:,::-1];
       writer.write(large);
+    video.release();
+    writer.release();
   elif FLAGS.image is not None:
     img = cv2.imread(FLAGS.image);
     if img is None:
